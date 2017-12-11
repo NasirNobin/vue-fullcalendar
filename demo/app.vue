@@ -3,7 +3,7 @@
     <full-calendar
     class="test-fc"
       :events="fcEvents"
-      first-day='1'
+      first-day='0'
       locale="en"
       @changeMonth="changeMonth"
       @eventClick="eventClick"
@@ -103,7 +103,7 @@ export default {
 	},
   methods : {
     'changeMonth' (start, end, current) {
-      console.log('changeMonth', start.format(), end.format(), current.format())
+      console.log('changeMonth', start.format('DD, MMM YYYY | '), end.format('DD, MMM YYYY | '), current.format('DD, MMM YYYY'))
     },
     'eventClick' (event, jsEvent, pos) {
        console.log('eventClick', event, jsEvent, pos)

@@ -2,8 +2,15 @@
     <div class="comp-full-calendar">
 
         <!-- header pick month -->
-        <fc-header :current-month="currentMonth" :first-day="firstDay" :locale="locale" @change="emitChangeMonth">
-
+        <fc-header
+            :current-month="currentMonth"
+            :first-day="firstDay"
+            :locale="locale"
+            :currentView="currentView"
+            :currentWeekIndex="currentWeekIndex"
+            @change="emitChangeMonth"
+            @changeWeek="emitChangeWeek"
+        >
             <div slot="header-left">
                 <slot name="fc-header-left">
                 </slot>
@@ -11,11 +18,26 @@
 
             <div slot="header-right">
                 <slot name="fc-header-right">
+                    <div class="fc-button-group button-group">
+                        <button
+                            type="button"
+                            class="fc-month-button fc-button"
+                            :class="{'fc-active': currentView == 'month'}"
+                            @click.prevent="currentView = 'month'"
+                        > month </button>
+                        <button
+                            type="button"
+                            class="fc-agendaWeek-button fc-button"
+                            :class="{'fc-active': currentView == 'week'}"
+                            @click.prevent="currentView = 'week'"
+                        > week </button>
+                    </div>
                 </slot>
             </div>
         </fc-header>
+
         <!-- body display date day and events -->
-        <div class="full-calendar-body">
+        <div class="full-calendar-body" v-if="isMonthView">
             <div class="weeks">
                 <strong class="week" v-for="dayIndex in 7">{{ (dayIndex - 1) | localeWeekDay(firstDay, locale) }}</strong>
             </div>
@@ -93,6 +115,85 @@
 
             </div>
         </div>
+        <div class="full-calendar-body fc-week-view" v-else>
+            <div class="weeks">
+                <strong class="week" v-for="dayIndex in 7">{{ (dayIndex - 1) | localeWeekDay(firstDay, locale) }}</strong>
+            </div>
+            <div class="dates" ref="dates">
+                <div class="dates-bg">
+                    <div class="week-row" v-for="(week,weekIndex) in currentDates" :class="{'currentWeekIndex': currentWeekIndex == weekIndex}">
+                        <div
+                            class="day-cell"
+                            v-for="day in week"
+                            :class="{'today' : day.isToday, 'not-cur-month' : !day.isCurMonth}"
+                        >
+                            <p class="day-number">{{ day.monthDay }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- absolute so we can make dynamic td -->
+                <div class="dates-events">
+                        <div class="events-week" v-for="(week,weekIndex) in currentDates" :data-weekIndex="weekIndex">
+                            <div
+                                class="events-day" v-for="day in week"
+                                track-by="$index"
+                                :class="{'today' : day.isToday, 'not-cur-month' : !day.isCurMonth}"
+                                @click.stop="dayClick(day.date, $event)">
+
+                                <p class="day-number">{{day.monthDay}}</p>
+
+                                <div class="event-box" :data-date="day.date.format()">
+                                    <event-card
+                                        :event="event"
+                                        :date="day.date"
+                                        :firstDay="firstDay"
+                                        v-for="event in day.events"
+                                        v-show="event.cellIndex <= eventLimit"
+                                        @click="eventClick">
+                                            <div :data-start="event.start" :data-event-id="event.id" :data-event-cellIndex="event.cellIndex">
+                                                <slot name="fc-event-card" :event="event"></slot>
+                                            </div>
+                                    </event-card>
+
+                                    <p
+                                        v-if="day.events.length > eventLimit"
+                                        class="more-link"
+                                        @click.stop="selectThisDay(day, $event)">
+                                        + {{day.events[day.events.length -1].cellIndex - eventLimit}} more
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+
+                <!-- full events when click show more -->
+                <div class="more-events" v-show="showMore" :style="{left: morePos.left + 'px', top: morePos.top + 'px'}">
+                    <div class="more-header">
+                        <span class="title">{{ moreTitle(selectDay.date) }}</span>
+                        <span class="close" @click.stop="showMore = false">x</span>
+                    </div>
+                    <div class="more-body">
+                        <ul class="body-list">
+                            <li
+                                v-for="event in selectDay.events"
+                                v-show="event.isShow"
+                                class="body-item"
+                                @click="eventClick(event, $event)"
+                            >
+                                {{event.title}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <slot name="body-card">
+
+                </slot>
+
+            </div>
+        </div>
+
     </div>
 </template>
 <script type="text/babel">
@@ -128,10 +229,19 @@ export default {
     mounted() {
         this.setSortable();
         this.emitChangeMonth(this.currentMonth);
+
+        let start       = dateFunc.getMonthViewStartDate(this.currentMonth,this.firstDay);
+        let currentWeek = moment().week()-start.week();
+        currentWeek     = currentWeek < 0 ? 0 : currentWeek;
+        currentWeek     = currentWeek > 5 ? 5 : currentWeek;
+
+        this.emitChangeWeek(currentWeek);
     },
     data() {
         return {
             currentMonth: moment().startOf('month'),
+            currentWeekIndex: 0,
+            currentView: 'week',
             isLismit: true,
             eventLimit: 9999,
             showMore: false,
@@ -145,7 +255,13 @@ export default {
     computed: {
         currentDates() {
             return this.getCalendar()
-        }
+        },
+        isMonthView(){
+            return this.currentView === 'month';
+        },
+        isWeekView(){
+            return this.currentView === 'week';
+        },
     },
     methods: {
         setSortable() {
@@ -195,6 +311,9 @@ export default {
 
             this.$emit('changeMonth', start, end, firstDayOfMonth)
         },
+        emitChangeWeek(weekIndex) {
+            this.currentWeekIndex = weekIndex;
+        },
         moreTitle(date) {
             if (!date) return '';
             return moment(date).format('ll');
@@ -223,7 +342,9 @@ export default {
                 calendar.push(week);
             }
 
-            console.log(calendar);
+            // if (this.isWeekView) {
+            //     return [calendar[this.currentWeekIndex]];
+            // }
 
             return calendar
         },
@@ -305,16 +426,51 @@ export default {
 }
 </script>
 <style lang="scss">
-  .comp-full-calendar {
-      // font-family: "elvetica neue", tahoma, "hiragino sans gb";
-      padding: 20px;
-      background: #fff;
-      max-width: 960px;
-      margin: 0 auto;
-      ul, p {
-          margin: 0;
-          padding: 0;
-      }
+    .currentWeekIndex {
+        background: #fffad0;
+    }
+    .comp-full-calendar {
+        // font-family: "elvetica neue", tahoma, "hiragino sans gb";
+        padding: 20px;
+        background: #fff;
+        max-width: 960px;
+        margin: 0 auto;
+        ul, p {
+            margin: 0;
+            padding: 0;
+        }
+
+        .fc-button{
+
+            outline: none;
+            box-shadow: none;
+            display: inline-block;
+            text-decoration: none;
+            font-size: 13px;
+            line-height: 26px;
+            height: 28px;
+            margin: 0;
+            padding: 0 10px 1px;
+            cursor: pointer;
+            border-width: 1px;
+            border-style: solid;
+            -webkit-appearance: none;
+            border-radius: 3px;
+            white-space: nowrap;
+            box-sizing: border-box;
+
+            &.fc-active{
+                background: #eee;
+                border-color: #999;
+                -webkit-box-shadow: inset 0 2px 5px -3px rgba(0, 0, 0, 0.5);
+                box-shadow: inset 0 2px 5px -3px rgba(0, 0, 0, 0.5);
+            }
+
+            &:focus{
+                box-shadow: none;
+            }
+        }
+
   }
   .full-calendar-body {
       margin-top: 20px;
