@@ -1,75 +1,103 @@
 <template>
   <div>
-  	<p>
-  		Here is the demo of vue-fullcalendar, no jquery fullcalendar.js required!
-  	</p>
-    <full-calendar class="test-fc" :events="fcEvents" 
-      first-day='1' locale="fr"
+    <full-calendar
+    class="test-fc"
+      :events="fcEvents"
+      first-day='1'
+      locale="en"
       @changeMonth="changeMonth"
       @eventClick="eventClick"
       @dayClick="dayClick"
       @moreClick="moreClick">
+
         <template slot="fc-event-card" scope="p">
-            <p><i class="fa">sadfsd</i> {{ p.event.title }} test</p>
+          <p>{{ p.event.title }}</p>
         </template>
+
     </full-calendar>
+
   </div>
 </template>
 <script>
 let demoEvents = [
     {
-      title    : 'Sunny 725-727',
-      start    : '2017-02-25',
-      end      : '2017-02-27',
+      id       : 1,
+      title    : '111',
+      start    : '2017-11-27',
       cssClass : 'family'
     },
     {
-      title : 'Lunfel 726-727',
-      start : '2017-02-26',
-      end : '2017-02-27',
-      cssClass : ['home', 'work']
+      id       : 2,
+      title    : '222',
+      start    : '2017-11-27',
+      cssClass : 'family'
     },
     {
-      title : 'Lunfel 2/27-2/28',
-      start : '2017-02-27',
-      end : '2017-02-28'
+      id       : 3,
+      title    : '333',
+      start    : '2017-11-28',
+      cssClass : 'family'
     },
     {
-        title : 'Lunfel 2/27-2/28',
-        start : '2017-02-27',
-        end : '2017-02-28'
+      id       : 4,
+      title    : '444',
+      start    : '2017-11-28',
+      cssClass : 'family'
     },
     {
-        title : 'Lunfel 2/27-2/28',
-        start : '2017-02-27',
-        end : '2017-02-28'
+      id       : 5,
+      title    : '555',
+      start    : '2017-11-29',
+      cssClass : 'family'
     },
     {
-        title : 'Lunfel 2/26-3/05',
-        start : '2017-02-26',
-        end : '2017-03-05'
+      id       : 6,
+      title    : '666',
+      start    : '2017-11-29',
+      cssClass : 'family'
     },
     {
-        title : 'Lunfel 1/27-1/28',
-        start : '2017-01-27',
-        end : '2017-01-28'
+      id       : 7,
+      title    : '777',
+      start    : '2017-12-05',
+      cssClass : 'family'
     },
     {
-        title : 'Lunfel 1/27-2/2',
-        start : '2017-01-27',
-        end : '2017-02-02'
+      id       : 8,
+      title    : '888',
+      start    : '2017-12-05',
+      cssClass : 'family'
     },
     {
-        title : 'Lunfel 3/27-3/28',
-        start : '2017-03-27',
-        end : '2017-03-28'
+      id       : 18,
+      title    : '1818',
+      start    : '2017-12-05',
+      cssClass : 'family'
     },
+    {
+      id       : 9,
+      title    : '9999',
+      start    : '2017-12-05',
+      cssClass : 'family'
+    },
+    {
+      id       : 10,
+      title    : '1010',
+      start    : '2017-12-05',
+      cssClass : 'family'
+    },
+    {
+      id       : 11,
+      title    : '1111',
+      start    : '2017-12-25',
+      cssClass : 'family'
+    }
   ];
 
 export default {
 	data () {
 		return {
-            name:'Sunny!',
+            name:'Test!',
             fcEvents : demoEvents
         }
 	},

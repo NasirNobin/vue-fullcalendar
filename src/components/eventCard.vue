@@ -11,6 +11,7 @@
     import moment from 'moment'
 
     export default {
+        name: 'eventCard',
         props: ['event', 'date', 'firstDay'],
         computed: {
             cssClasses () {
