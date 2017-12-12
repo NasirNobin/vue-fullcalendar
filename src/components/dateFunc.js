@@ -12,9 +12,9 @@ let dateFunc = {
         return start;
     },
     getMonthViewEndDate(date) {
-        return this.getMonthViewStartDate().add(6, 'weeks');
+        return this.getMonthViewStartDate(date).add(6, 'weeks').subtract(1,'day');
     },
-    getWeekViewStartDate(date,firstDay,weekIndex) {
+    getWeekViewStartDate(date,weekIndex) {
         let start = this.getMonthViewStartDate(date);
         if (weekIndex) {
             start.add(weekIndex*7, 'days');
@@ -22,10 +22,18 @@ let dateFunc = {
        return start;
     },
     getWeekViewEndDate(date) {
-        return this.getMonthViewStartDate().add(6, 'weeks');
+        // return this.getMonthViewStartDate(date).add(6, 'weeks');
     },
     weekOfMonth(m) {
       return m.week() - moment(m).startOf('month').week();
-    }
+    },
+    getCurrentWeekOfMonth(date,firstDay) {
+        let start       = this.getMonthViewStartDate(date,firstDay);
+        // let currentWeek = moment().week()-start.week();
+        // currentWeek     = currentWeek < 0 ? 0 : currentWeek;
+        // currentWeek     = currentWeek > 5 ? 5 : currentWeek;
+        let currentWeek = moment().diff(start,'week');
+        return currentWeek;
+    },
 };
 module.exports = dateFunc;

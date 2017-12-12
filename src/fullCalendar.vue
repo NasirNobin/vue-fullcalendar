@@ -1,40 +1,43 @@
 <template>
     <div class="comp-full-calendar">
 
-        <!-- header pick month -->
-        <fc-header
-            :current-month="currentMonth"
-            :first-day="firstDay"
-            :locale="locale"
-            :currentView="currentView"
-            :currentWeekIndex="currentWeekIndex"
-            @change="emitChangeMonth"
-            @changeWeek="emitChangeWeek"
-        >
-            <div slot="header-left">
-                <slot name="fc-header-left">
+        <!-- header -->
+        <div class="full-calendar-header">
+            <div class="header-left">
+                <slot name="header-left">
                 </slot>
             </div>
-
-            <div slot="header-right">
-                <slot name="fc-header-right">
+            <div class="header-center">
+                <span @click.stop="goPrev" class="prev-month">
+                    {{leftArrow}}
+                </span>
+                <span class="title">
+                    {{title}}
+                </span>
+                <span @click.stop="goNext" class="next-month">
+                    {{rightArrow}}
+                </span>
+            </div>
+            <div class="header-right">
+                <slot name="header-right">
                     <div class="fc-button-group button-group">
                         <button
-                            type="button"
-                            class="fc-month-button fc-button"
-                            :class="{'fc-active': currentView == 'month'}"
-                            @click.prevent="currentView = 'month'"
+                                type="button"
+                                class="fc-month-button fc-button"
+                                :class="{'fc-active': currentView == 'month'}"
+                                @click.prevent="currentView = 'month'"
                         > month </button>
                         <button
-                            type="button"
-                            class="fc-agendaWeek-button fc-button"
-                            :class="{'fc-active': currentView == 'week'}"
-                            @click.prevent="currentView = 'week'"
-                        > week </button>
-                    </div>
+                                type="button"
+                                class="fc-agendaWeek-button fc-button"
+                                :class="{'fc-active': currentView == 'week'}"
+                                @click.prevent="currentView = 'week'"
+                            > week </button>
+                        </div>
                 </slot>
             </div>
-        </fc-header>
+        </div>
+        <!-- ./header -->
 
         <!-- body display date day and events -->
         <div class="full-calendar-body" v-if="isMonthView">
@@ -121,7 +124,7 @@
             </div>
             <div class="dates" ref="dates">
                 <div class="dates-bg">
-                    <div class="week-row" v-for="(week,weekIndex) in currentDates" :class="{'currentWeekIndex': currentWeekIndex == weekIndex}">
+                    <div class="week-row" v-for="(week,weekIndex) in currentDates">
                         <div
                             class="day-cell"
                             v-for="day in week"
@@ -224,24 +227,17 @@ export default {
     },
     components: {
         'event-card': EventCard,
-        'fc-header': require('./components/header')
     },
     mounted() {
         this.setSortable();
-        this.emitChangeMonth(this.currentMonth);
-
-        let start       = dateFunc.getMonthViewStartDate(this.currentMonth,this.firstDay);
-        let currentWeek = moment().week()-start.week();
-        currentWeek     = currentWeek < 0 ? 0 : currentWeek;
-        currentWeek     = currentWeek > 5 ? 5 : currentWeek;
-
-        this.emitChangeWeek(currentWeek);
+        this.setDateRange();
     },
     data() {
         return {
             currentMonth: moment().startOf('month'),
-            currentWeekIndex: 0,
-            currentView: 'week',
+            currentWeekOfMonth: 0,
+            currentWeek: 0,
+            currentView: 'month',
             isLismit: true,
             eventLimit: 9999,
             showMore: false,
@@ -249,12 +245,27 @@ export default {
                 top: 0,
                 left: 0
             },
-            selectDay: {}
+            selectDay: {},
+            leftArrow: '<',
+            rightArrow: '>'
         }
     },
     computed: {
         currentDates() {
             return this.getCalendar()
+        },
+        title() {
+            if (!this.currentMonth) return;
+
+            if (this.currentView == 'month') {
+                return this.currentMonth.locale(this.locale).format('MMMM YYYY');
+            } else {
+                let start    = dateFunc.getWeekViewStartDate(this.currentMonth,this.currentWeekOfMonth).locale(this.locale);
+                let end      = start.clone().add(6,'day');
+                let endMonth = start.format('MMM') === end.format('MMM') ? '' : end.format('MMM') + ' ';
+
+                return start.format('MMM DD') + ' - ' + endMonth + end.format('DD, YYYY');
+            }
         },
         isMonthView(){
             return this.currentView === 'month';
@@ -263,15 +274,94 @@ export default {
             return this.currentView === 'week';
         },
     },
+    watch: {
+        currentWeekOfMonth(currentWeekOfMonth){
+            let start = dateFunc.getWeekViewStartDate(this.currentMonth,currentWeekOfMonth);
+            this.currentWeek = start.week();
+        },
+        currentView(currentView){
+            this.setDateRange();
+
+            setTimeout(() => {
+                this.destroySortable();
+                this.setSortable(); // mayb this is not a good place to do stuff
+            },300);
+        },
+    },
     methods: {
+        setDateRange(){
+            if(this.isMonthView){
+                this.emitChangeMonth(this.currentMonth);
+            }else{
+                this.emitChangeWeek(dateFunc.getCurrentWeekOfMonth(this.currentMonth,this.firstDay));
+            }
+        },
+        goPrev() {
+            let newMonth = this.isMonthView ? this.goPrevMonth() : this.goPrevWeek();
+        },
+        goNext() {
+            let newMonth = this.isMonthView ? this.goNextMonth() : this.goNextWeek();
+        },
+
+        goPrevMonth(){
+            let newMonth = moment(this.currentMonth).subtract(1, 'months').startOf('month');
+            this.emitChangeMonth(newMonth);
+        },
+        goNextMonth(){
+            let newMonth = moment(this.currentMonth).add(1, 'months').startOf('month');
+            this.emitChangeMonth(newMonth);
+        },
+        goPrevWeek(){
+            if (this.currentWeekOfMonth <= 0) {
+
+                // there's room for refactoring
+                let startOfWeek = dateFunc.getWeekViewStartDate(this.currentMonth,this.currentWeekOfMonth);
+                let needToGo    = startOfWeek.subtract(1,'week');
+
+                this.goPrevMonth();
+
+                let monthStart = dateFunc.getMonthViewStartDate(this.currentMonth,this.firstDay);
+                let weekIndex  = needToGo.diff(monthStart, 'week');
+
+                this.emitChangeWeek(weekIndex);
+
+            }else{
+                this.emitChangeWeek(this.currentWeekOfMonth-1);
+            }
+        },
+        goNextWeek(){
+            if (this.currentWeekOfMonth >= 5) {
+
+                // there's room for refactoring
+                let startOfWeek = dateFunc.getWeekViewStartDate(this.currentMonth,this.currentWeekOfMonth);
+                let needToGo    = startOfWeek.add(1,'week');
+
+                this.goNextMonth();
+
+                let monthStart = dateFunc.getMonthViewStartDate(this.currentMonth,this.firstDay);
+                let weekIndex  = needToGo.diff(monthStart, 'week');
+
+                this.emitChangeWeek(weekIndex);
+            }else{
+                this.emitChangeWeek(this.currentWeekOfMonth+1);
+            }
+        },
+
+        destroySortable() {
+            // var self = this;
+            // var el = document.querySelectorAll('.event-box');
+
+            // el.forEach(function(node){
+            //     var sortable = Sortable.create(node, JSON.parse(JSON.stringify(config))); // _.clone
+            // });
+        },
+
         setSortable() {
-
             var self = this;
-
             var el = document.querySelectorAll('.event-box');
-
             var config = {
                 group: 'event',
+                draggable: '.event-item',
                 sort: false,
                 animation: 150,
                 onUpdate: function (evt) {
@@ -287,7 +377,11 @@ export default {
                     var item = evt.item.querySelector('div');
                     var id   = item.getAttribute('data-event-id');
 
+                    console.log(item.getAttribute('data-start'));
+
                     item.setAttribute('data-start', to);
+
+                    console.log(to);
 
                     // underscore
                     self.events.forEach(function(event,index){
@@ -299,7 +393,7 @@ export default {
             };
 
             el.forEach(function(node){
-                var sortable = Sortable.create(node, JSON.parse(JSON.stringify(config))); // _.clone
+                var sortable = Sortable.create(node,config); // _.clone
             });
         },
 
@@ -309,10 +403,15 @@ export default {
             let start = dateFunc.getMonthViewStartDate(firstDayOfMonth, this.firstDay);
             let end = dateFunc.getMonthViewEndDate(firstDayOfMonth, this.firstDay);
 
-            this.$emit('changeMonth', start, end, firstDayOfMonth)
+            this.$emit('changeDateRange', start, end, firstDayOfMonth)
         },
         emitChangeWeek(weekIndex) {
-            this.currentWeekIndex = weekIndex;
+            this.currentWeekOfMonth = weekIndex;
+
+            let start = dateFunc.getWeekViewStartDate(this.currentMonth,this.currentWeekOfMonth);
+            let end   = start.clone().add(1,'week').subtract(1,'day');
+
+            this.$emit('changeDateRange', start, end, start)
         },
         moreTitle(date) {
             if (!date) return '';
@@ -324,6 +423,12 @@ export default {
             let calendar = [];
 
             for (let perWeek = 0; perWeek < 6; perWeek++) {
+
+                if (this.isWeekView && perWeek != this.currentWeekOfMonth) {
+                    monthViewStartDate.add(1, 'week');
+                    continue;
+                }
+
                 let week = [];
 
                 for (let perDay = 0; perDay < 7; perDay++) {
@@ -341,10 +446,6 @@ export default {
 
                 calendar.push(week);
             }
-
-            // if (this.isWeekView) {
-            //     return [calendar[this.currentWeekIndex]];
-            // }
 
             return calendar
         },
@@ -426,7 +527,26 @@ export default {
 }
 </script>
 <style lang="scss">
-    .currentWeekIndex {
+
+    .full-calendar-header {
+        display: flex;
+        align-items: center;
+        .header-left, .header-right {
+            flex: 1;
+        }
+        .header-center {
+            flex: 3;
+            text-align: center;
+            .title {
+                margin: 0 10px;
+            }
+            .prev-month, .next-month {
+                cursor: pointer;
+            }
+        }
+    }
+
+    .currentWeekOfMonth {
         background: #fffad0;
     }
     .comp-full-calendar {
