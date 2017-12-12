@@ -28,11 +28,15 @@ let dateFunc = {
       return m.week() - moment(m).startOf('month').week();
     },
     getCurrentWeekOfMonth(date,firstDay) {
+        if (!moment().isSame(date,'month')) {
+            return 0;
+        }
+
         let start       = this.getMonthViewStartDate(date,firstDay);
-        // let currentWeek = moment().week()-start.week();
-        // currentWeek     = currentWeek < 0 ? 0 : currentWeek;
-        // currentWeek     = currentWeek > 5 ? 5 : currentWeek;
-        let currentWeek = moment().diff(start,'week');
+        let currentWeek = moment().week()-start.week();
+        currentWeek     = currentWeek < 0 ? 0 : currentWeek;
+        currentWeek     = currentWeek > 5 ? 5 : currentWeek;
+        // let currentWeek = moment().diff(start,'week');
         return currentWeek;
     },
 };
