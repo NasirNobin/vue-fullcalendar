@@ -1,7 +1,7 @@
 <template>
   <div>
     <full-calendar
-    class="test-fc"
+        class="test-fc"
       :events="fcEvents"
       first-day='0'
       locale="en"
@@ -57,8 +57,8 @@ export default {
     'changeDateRange' (start, end, current) {
       console.log('changeDateRange', start.format('DD, MMM YYYY | '), end.format('DD, MMM YYYY | '), current.format('DD, MMM YYYY'))
     },
-    'eventClick' (event, jsEvent, pos) {
-       console.log('eventClick', event, jsEvent, pos)
+    'eventClick' (event, jsEvent) {
+       console.log('eventClick', event, jsEvent)
     },
     'dayClick' (day, jsEvent) {
       console.log('dayClick', day, jsEvent)

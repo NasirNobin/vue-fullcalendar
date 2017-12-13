@@ -13,7 +13,7 @@
   "scripts": {
     "demo": "webpack",
     "dev": "webpack-dev-server --output-public-path=/static/ --inline --hot",
-    "build": "webpack --progress --hide-modules --config webpack.build.js && webpack --progress --hide-modules --config webpack.build.min.js -p"
+    "build": "webpack --progress --hide-modules --config webpack.build.js && webpack --progress --hide-modules --config webpack.build.min.js -p && cp -R /Users/nasir/code/vue/vue-fullcalendar/dist/. /Users/nasir/code/wesocial2/wp-content/plugins/wesocial/node_modules/vue-fullcalendar/dist/"
   },
   "repository": {
     "type": "git",

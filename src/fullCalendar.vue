@@ -24,7 +24,7 @@
                         <button
                                 type="button"
                                 class="fc-month-button fc-button"
-                                :class="{'fc-active': isSameWeek }"
+                                v-if="!isSameWeek"
                                 @click.prevent="goToday"
                         > today </button>
                         <button
@@ -59,7 +59,7 @@
                                 class="events-day day-cell" v-for="day in week"
                                 track-by="$index"
                                 :class="{'today' : day.isToday, 'not-cur-month' : !day.isCurMonth}"
-                                @click.stop="dayClick(day.date, $event)">
+                                @click="dayClick(day.date, $event)">
 
                                 <p class="day-number">{{day.monthDay}}</p>
 
@@ -99,7 +99,7 @@
                                 v-for="event in selectDay.events"
                                 v-show="event.isShow"
                                 class="body-item"
-                                @click="eventClick(event, $event)"
+                                @click="eventClick"
                             >
                                 {{event.title}}
                             </li>
@@ -132,6 +132,10 @@ export default {
             type: String,
             default: 'en'
         },
+        defaultView: {
+            type: String,
+            default: 'month'
+        },
         firstDay: {
             type: Number | String,
             validator(val) {
@@ -145,6 +149,7 @@ export default {
         'event-card': EventCard,
     },
     mounted() {
+        this.currentView = this.defaultView;
         this.resetSortable();
         this.setDateRange();
     },
@@ -282,12 +287,7 @@ export default {
         },
 
         destroySortable() {
-            // var vm = this;
-            // var el = document.querySelectorAll('.event-box');
 
-            // el.forEach(function(node){
-            //     var sortable = Sortable.create(node, JSON.parse(JSON.stringify(config))); // _.clone
-            // });
         },
         resetSortable() {
             setTimeout(() => {
@@ -296,51 +296,42 @@ export default {
             },300);
         },
         setSortable() {
-            var el = document.querySelectorAll('.event-box:not([fc-sortable])');
+            var el = document.querySelectorAll('.event-box');
             var vm = this;
 
             el.forEach(function(node){
                 var sortable = Sortable.create(node,{
-                group: {
-                    name: 'fc-events',
-                    put: dateFunc.isFuture(moment(node.getAttribute('data-date'))),
-                },
-                draggable: '.event-item',
-                sort: true,
-                animation: 150,
+                    group: {
+                        name: 'fc-events',
+                        put: dateFunc.isFuture(moment(node.getAttribute('data-date'))),
+                    },
+                    draggable: '.event-item',
+                    sort: false,
+                    animation: 150,
+                    onAdd: function (evt) {
 
-                // Element dragging started
-                onStart: function (/**Event*/evt) {
-                      console.log(evt.item);
-                },
+                        var to    = moment(evt.to.getAttribute('data-date'));
+                        var item  = evt.item.querySelector('div');
+                        var id    = item.getAttribute('data-event-id');
+                        var index = vm.events.findIndex(function (o) { return o.id == id; });
 
-                onEnd: function (evt) {
-                    console.log(evt.item);
+                        var event = vm.events[index];
+                        var from  = moment(event.start);
 
-                    var to    = moment(evt.to.getAttribute('data-date'));
-                    var item  = evt.item.querySelector('div');
-                    var id    = item.getAttribute('data-event-id');
-                    var index = vm.events.findIndex(function (o) { return o.id == id; });
+                        var toDate = moment(to)
+                                    .hour(from.format('HH'))
+                                    .minute(from.format('mm'))
+                                    .second(from.format('ss'))
 
-                    var event = vm.events[index];
-                    var from  = moment(event.start);
+                        item.setAttribute('start-date', toDate.format());
 
-                    var toDate = moment(to)
-                                .hour(from.format('HH'))
-                                .minute(from.format('mm'))
-                                .second(from.format('ss'))
-                                .format();
+                        // event.start = toDate;
 
-                    item.setAttribute('start-date', toDate);
+                        vm.$emit('eventDrop',event,toDate);
+                    },
+                });
 
-                    // event.start = toDate;
-
-                    console.log(evt.item);
-
-                    vm.$emit('event-drop',event,toDate);
-                },
-            });
-                node.setAttribute('fc-sortable', true);
+                node.setAttribute('fc-sortable', dateFunc.isFuture(moment(node.getAttribute('data-date'))));
             });
         },
 
@@ -452,11 +443,8 @@ export default {
             this.$emit('dayClick', day, jsEvent)
         },
         eventClick(event, jsEvent) {
-            if (!event.isShow) return;
-
             jsEvent.stopPropagation();
-            let pos = this.computePos(jsEvent.target);
-            this.$emit('eventClick', event, jsEvent, pos);
+            this.$emit('eventClick', event, jsEvent);
         },
         log(evt) {
             console.log(evt);

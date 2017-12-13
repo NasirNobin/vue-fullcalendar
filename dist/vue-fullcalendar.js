@@ -667,6 +667,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            type: String,
 	            default: 'en'
 	        },
+	        defaultView: {
+	            type: String,
+	            default: 'month'
+	        },
 	        firstDay: {
 	            type: Number | String,
 	            validator: function validator(val) {
@@ -681,6 +685,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        'event-card': _eventCard2.default
 	    },
 	    mounted: function mounted() {
+	        this.currentView = this.defaultView;
 	        this.resetSortable();
 	        this.setDateRange();
 	    },
@@ -815,14 +820,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.emitChangeWeek(this.currentWeekOfMonth + 1);
 	            }
 	        },
-	        destroySortable: function destroySortable() {
-	            // var vm = this;
-	            // var el = document.querySelectorAll('.event-box');
-	
-	            // el.forEach(function(node){
-	            //     var sortable = Sortable.create(node, JSON.parse(JSON.stringify(config))); // _.clone
-	            // });
-	        },
+	        destroySortable: function destroySortable() {},
 	        resetSortable: function resetSortable() {
 	            var _this = this;
 	
@@ -832,7 +830,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }, 300);
 	        },
 	        setSortable: function setSortable() {
-	            var el = document.querySelectorAll('.event-box:not([fc-sortable])');
+	            var el = document.querySelectorAll('.event-box');
 	            var vm = this;
 	
 	            el.forEach(function (node) {
@@ -842,16 +840,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        put: _dateFunc2.default.isFuture((0, _moment2.default)(node.getAttribute('data-date')))
 	                    },
 	                    draggable: '.event-item',
-	                    sort: true,
+	                    sort: false,
 	                    animation: 150,
-	
-	                    // Element dragging started
-	                    onStart: function onStart( /**Event*/evt) {
-	                        console.log(evt.item);
-	                    },
-	
-	                    onEnd: function onEnd(evt) {
-	                        console.log(evt.item);
+	                    onAdd: function onAdd(evt) {
 	
 	                        var to = (0, _moment2.default)(evt.to.getAttribute('data-date'));
 	                        var item = evt.item.querySelector('div');
@@ -863,18 +854,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        var event = vm.events[index];
 	                        var from = (0, _moment2.default)(event.start);
 	
-	                        var toDate = (0, _moment2.default)(to).hour(from.format('HH')).minute(from.format('mm')).second(from.format('ss')).format();
+	                        var toDate = (0, _moment2.default)(to).hour(from.format('HH')).minute(from.format('mm')).second(from.format('ss'));
 	
-	                        item.setAttribute('start-date', toDate);
+	                        item.setAttribute('start-date', toDate.format());
 	
 	                        // event.start = toDate;
 	
-	                        console.log(evt.item);
-	
-	                        vm.$emit('event-drop', event, toDate);
+	                        vm.$emit('eventDrop', event, toDate);
 	                    }
 	                });
-	                node.setAttribute('fc-sortable', true);
+	
+	                node.setAttribute('fc-sortable', _dateFunc2.default.isFuture((0, _moment2.default)(node.getAttribute('data-date'))));
 	            });
 	        },
 	        emitChangeMonth: function emitChangeMonth(firstDayOfMonth) {
@@ -985,11 +975,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.$emit('dayClick', day, jsEvent);
 	        },
 	        eventClick: function eventClick(event, jsEvent) {
-	            if (!event.isShow) return;
-	
 	            jsEvent.stopPropagation();
-	            var pos = this.computePos(jsEvent.target);
-	            this.$emit('eventClick', event, jsEvent, pos);
+	            this.$emit('eventClick', event, jsEvent);
 	        },
 	        log: function log(evt) {
 	            console.log(evt);
@@ -17967,6 +17954,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    class: _vm.cssClasses,
 	    on: {
 	      "click": function($event) {
+	        $event.preventDefault();
 	        _vm.$emit('click', _vm.event, $event)
 	      }
 	    }
@@ -19563,11 +19551,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    staticClass: "header-right"
 	  }, [_vm._t("header-right", [_c('div', {
 	    staticClass: "fc-button-group button-group"
-	  }, [_c('button', {
+	  }, [(!_vm.isSameWeek) ? _c('button', {
 	    staticClass: "fc-month-button fc-button",
-	    class: {
-	      'fc-active': _vm.isSameWeek
-	    },
 	    attrs: {
 	      "type": "button"
 	    },
@@ -19577,7 +19562,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _vm.goToday($event)
 	      }
 	    }
-	  }, [_vm._v(" today ")]), _vm._v(" "), _c('button', {
+	  }, [_vm._v(" today ")]) : _vm._e(), _vm._v(" "), _c('button', {
 	    staticClass: "fc-month-button fc-button",
 	    class: {
 	      'fc-active': _vm.currentView == 'month'
@@ -19638,7 +19623,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        },
 	        on: {
 	          "click": function($event) {
-	            $event.stopPropagation();
 	            _vm.dayClick(day.date, $event)
 	          }
 	        }
@@ -19720,9 +19704,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }],
 	      staticClass: "body-item",
 	      on: {
-	        "click": function($event) {
-	          _vm.eventClick(event, $event)
-	        }
+	        "click": _vm.eventClick
 	      }
 	    }, [_vm._v("\n                            " + _vm._s(event.title) + "\n                        ")])
 	  }))])]), _vm._v(" "), _vm._t("body-card")], 2)])])
