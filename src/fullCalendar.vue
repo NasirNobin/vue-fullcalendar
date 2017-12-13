@@ -315,10 +315,6 @@ export default {
                 },
 
                 onEnd: function (evt) {
-
-                    var el = evt.item;
-                    el.parentNode.removeChild(el);
-
                     console.log(evt.item);
 
                     var to    = moment(evt.to.getAttribute('data-date'));
@@ -337,7 +333,7 @@ export default {
 
                     item.setAttribute('start-date', toDate);
 
-                    event.start = toDate;
+                    // event.start = toDate;
 
                     console.log(evt.item);
 
