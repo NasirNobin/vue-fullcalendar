@@ -144,7 +144,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	// module
-	exports.push([module.id, "\n.full-calendar-header {\n  display: flex;\n  align-items: center;\n}\n.full-calendar-header .header-left, .full-calendar-header .header-right {\n    flex: 1;\n}\n.full-calendar-header .header-center {\n    flex: 3;\n    text-align: center;\n}\n.full-calendar-header .header-center .title {\n      margin: 0 10px;\n}\n.full-calendar-header .header-center .prev-month, .full-calendar-header .header-center .next-month {\n      cursor: pointer;\n}\n.currentWeekOfMonth {\n  background: #fffad0;\n}\n.comp-full-calendar {\n  padding: 20px;\n  background: #fff;\n  max-width: 960px;\n  margin: 0 auto;\n}\n.comp-full-calendar ul, .comp-full-calendar p {\n    margin: 0;\n    padding: 0;\n}\n.comp-full-calendar .fc-button {\n    outline: none;\n    box-shadow: none;\n    display: inline-block;\n    text-decoration: none;\n    font-size: 13px;\n    line-height: 26px;\n    height: 28px;\n    margin: 0;\n    padding: 0 10px 1px;\n    cursor: pointer;\n    border-width: 1px;\n    border-style: solid;\n    -webkit-appearance: none;\n    border-radius: 3px;\n    white-space: nowrap;\n    box-sizing: border-box;\n}\n.comp-full-calendar .fc-button.fc-active {\n      background: #eee;\n      border-color: #999;\n      -webkit-box-shadow: inset 0 2px 5px -3px rgba(0, 0, 0, 0.5);\n      box-shadow: inset 0 2px 5px -3px rgba(0, 0, 0, 0.5);\n}\n.comp-full-calendar .fc-button:focus {\n      box-shadow: none;\n}\n.full-calendar-body {\n  margin-top: 20px;\n}\n.full-calendar-body .weeks {\n    display: flex;\n    border-top: 1px solid #e0e0e0;\n    border-bottom: 1px solid #e0e0e0;\n    border-left: 1px solid #e0e0e0;\n}\n.full-calendar-body .weeks .week {\n      flex: 1;\n      text-align: center;\n      border-right: 1px solid #e0e0e0;\n}\n.full-calendar-body .dates {\n    position: relative;\n}\n.full-calendar-body .dates .dates-events {\n      position: relative;\n      z-index: 1;\n      width: 100%;\n}\n.full-calendar-body .dates .dates-events .events-week {\n        display: flex;\n        border-left: 1px solid #e0e0e0;\n}\n.full-calendar-body .dates .dates-events .events-week .events-day {\n          cursor: pointer;\n          flex: 1;\n          min-height: 112px;\n          overflow: hidden;\n          text-overflow: ellipsis;\n          border-right: 1px solid #e0e0e0;\n          border-bottom: 1px solid #e0e0e0;\n          display: flex;\n          flex-direction: column;\n          padding-left: 4px;\n}\n.full-calendar-body .dates .dates-events .events-week .events-day .day-number {\n            text-align: right;\n}\n.full-calendar-body .dates .dates-events .events-week .events-day.today {\n            background-color: #fcf8e3;\n}\n.full-calendar-body .dates .dates-events .events-week .events-day.not-cur-month .day-number {\n            color: rgba(0, 0, 0, 0.24);\n}\n.full-calendar-body .dates .dates-events .events-week .events-day .event-box {\n            flex: 1;\n}\n.full-calendar-body .dates .dates-events .events-week .events-day .event-box .event-item {\n              cursor: pointer;\n              font-size: 12px;\n              background-color: #C7E6FD;\n              margin-bottom: 2px;\n              color: rgba(0, 0, 0, 0.87);\n              padding: 0 0 0 4px;\n              height: 18px;\n              line-height: 18px;\n              white-space: nowrap;\n              overflow: hidden;\n              text-overflow: ellipsis;\n}\n.full-calendar-body .dates .dates-events .events-week .events-day .event-box .event-item.is-opacity {\n                opacity: 0;\n}\n.full-calendar-body .dates .dates-events .events-week .events-day .event-box .more-link {\n              cursor: pointer;\n              padding-left: 8px;\n              padding-right: 2px;\n              color: rgba(0, 0, 0, 0.38);\n              font-size: 14px;\n}\n.full-calendar-body .dates .more-events {\n      position: absolute;\n      width: 150px;\n      z-index: 2;\n      border: 1px solid #eee;\n      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);\n}\n.full-calendar-body .dates .more-events .more-header {\n        background-color: #eee;\n        padding: 5px;\n        display: flex;\n        align-items: center;\n        font-size: 14px;\n}\n.full-calendar-body .dates .more-events .more-header .title {\n          flex: 1;\n}\n.full-calendar-body .dates .more-events .more-header .close {\n          margin-right: 2px;\n          cursor: pointer;\n          font-size: 16px;\n}\n.full-calendar-body .dates .more-events .more-body {\n        height: 146px;\n        overflow: hidden;\n}\n.full-calendar-body .dates .more-events .more-body .body-list {\n          height: 144px;\n          padding: 5px;\n          overflow: auto;\n          background-color: #fff;\n}\n.full-calendar-body .dates .more-events .more-body .body-list .body-item {\n            cursor: pointer;\n            font-size: 12px;\n            background-color: #C7E6FD;\n            margin-bottom: 2px;\n            color: rgba(0, 0, 0, 0.87);\n            padding: 0 0 0 4px;\n            height: 18px;\n            line-height: 18px;\n            white-space: nowrap;\n            overflow: hidden;\n            text-overflow: ellipsis;\n}\n", ""]);
+	exports.push([module.id, "\n.full-calendar-header {\n  display: flex;\n  align-items: center;\n}\n.full-calendar-header .header-left, .full-calendar-header .header-right {\n    flex: 1;\n}\n.full-calendar-header .header-center {\n    flex: 3;\n    text-align: center;\n}\n.full-calendar-header .header-center .title {\n      margin: 0 10px;\n}\n.full-calendar-header .header-center .prev-month, .full-calendar-header .header-center .next-month {\n      cursor: pointer;\n}\n.currentWeekOfMonth {\n  background: #fffad0;\n}\n.comp-full-calendar {\n  padding: 20px;\n  background: #fff;\n  max-width: 960px;\n  margin: 0 auto;\n}\n.comp-full-calendar ul, .comp-full-calendar p {\n    margin: 0;\n    padding: 0;\n}\n.full-calendar-body {\n  margin-top: 20px;\n}\n.full-calendar-body .weeks {\n    display: flex;\n    border-top: 1px solid #e0e0e0;\n    border-bottom: 1px solid #e0e0e0;\n    border-left: 1px solid #e0e0e0;\n}\n.full-calendar-body .weeks .week {\n      flex: 1;\n      text-align: center;\n      border-right: 1px solid #e0e0e0;\n}\n.full-calendar-body .dates {\n    position: relative;\n}\n.full-calendar-body .dates .dates-events {\n      position: relative;\n      z-index: 1;\n      width: 100%;\n}\n.full-calendar-body .dates .dates-events .events-week {\n        display: flex;\n        border-left: 1px solid #e0e0e0;\n}\n.full-calendar-body .dates .dates-events .events-week .events-day {\n          cursor: pointer;\n          flex: 1;\n          min-height: 112px;\n          overflow: hidden;\n          text-overflow: ellipsis;\n          border-right: 1px solid #e0e0e0;\n          border-bottom: 1px solid #e0e0e0;\n          display: flex;\n          flex-direction: column;\n          padding-left: 4px;\n}\n.full-calendar-body .dates .dates-events .events-week .events-day .day-number {\n            text-align: right;\n}\n.full-calendar-body .dates .dates-events .events-week .events-day.today {\n            background-color: #fcf8e3;\n}\n.full-calendar-body .dates .dates-events .events-week .events-day.not-cur-month .day-number {\n            color: rgba(0, 0, 0, 0.24);\n}\n.full-calendar-body .dates .dates-events .events-week .events-day .event-box {\n            flex: 1;\n}\n.full-calendar-body .dates .dates-events .events-week .events-day .event-box .event-item {\n              cursor: pointer;\n              font-size: 12px;\n              background-color: #C7E6FD;\n              margin-bottom: 2px;\n              color: rgba(0, 0, 0, 0.87);\n              padding: 0 0 0 4px;\n              height: 18px;\n              line-height: 18px;\n              white-space: nowrap;\n              overflow: hidden;\n              text-overflow: ellipsis;\n}\n.full-calendar-body .dates .dates-events .events-week .events-day .event-box .event-item.is-opacity {\n                opacity: 0;\n}\n.full-calendar-body .dates .dates-events .events-week .events-day .event-box .more-link {\n              cursor: pointer;\n              padding-left: 8px;\n              padding-right: 2px;\n              color: rgba(0, 0, 0, 0.38);\n              font-size: 14px;\n}\n.full-calendar-body .dates .more-events {\n      position: absolute;\n      width: 150px;\n      z-index: 2;\n      border: 1px solid #eee;\n      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);\n}\n.full-calendar-body .dates .more-events .more-header {\n        background-color: #eee;\n        padding: 5px;\n        display: flex;\n        align-items: center;\n        font-size: 14px;\n}\n.full-calendar-body .dates .more-events .more-header .title {\n          flex: 1;\n}\n.full-calendar-body .dates .more-events .more-header .close {\n          margin-right: 2px;\n          cursor: pointer;\n          font-size: 16px;\n}\n.full-calendar-body .dates .more-events .more-body {\n        height: 146px;\n        overflow: hidden;\n}\n.full-calendar-body .dates .more-events .more-body .body-list {\n          height: 144px;\n          padding: 5px;\n          overflow: auto;\n          background-color: #fff;\n}\n.full-calendar-body .dates .more-events .more-body .body-list .body-item {\n            cursor: pointer;\n            font-size: 12px;\n            background-color: #C7E6FD;\n            margin-bottom: 2px;\n            color: rgba(0, 0, 0, 0.87);\n            padding: 0 0 0 4px;\n            height: 18px;\n            line-height: 18px;\n            white-space: nowrap;\n            overflow: hidden;\n            text-overflow: ellipsis;\n}\n", ""]);
 	
 	// exports
 
@@ -655,6 +655,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	//
 	//
 	//
+	//
+	//
+	//
 	
 	// import langSets from './dataMap/langSets'
 	exports.default = {
@@ -702,9 +705,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                top: 0,
 	                left: 0
 	            },
-	            selectDay: {},
-	            leftArrow: '<',
-	            rightArrow: '>'
+	            selectDay: {}
 	        };
 	    },
 	
@@ -19529,42 +19530,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    staticClass: "full-calendar-header"
 	  }, [_c('div', {
 	    staticClass: "header-left"
-	  }, [_vm._t("header-left")], 2), _vm._v(" "), _c('div', {
-	    staticClass: "header-center"
-	  }, [_c('span', {
-	    staticClass: "prev-month",
-	    on: {
-	      "click": function($event) {
-	        $event.stopPropagation();
-	        _vm.goPrev($event)
-	      }
-	    }
-	  }, [_vm._v("\n                " + _vm._s(_vm.leftArrow) + "\n            ")]), _vm._v(" "), _c('span', {
-	    staticClass: "title"
-	  }, [_vm._v("\n                " + _vm._s(_vm.title) + "\n            ")]), _vm._v(" "), _c('span', {
-	    staticClass: "next-month",
-	    on: {
-	      "click": function($event) {
-	        $event.stopPropagation();
-	        _vm.goNext($event)
-	      }
-	    }
-	  }, [_vm._v("\n                " + _vm._s(_vm.rightArrow) + "\n            ")])]), _vm._v(" "), _c('div', {
-	    staticClass: "header-right"
-	  }, [_vm._t("header-right", [_c('div', {
+	  }, [_vm._t("header-left", [_c('div', {
 	    staticClass: "fc-button-group button-group"
-	  }, [(!_vm.isSameWeek) ? _c('button', {
-	    staticClass: "fc-month-button fc-button",
-	    attrs: {
-	      "type": "button"
-	    },
-	    on: {
-	      "click": function($event) {
-	        $event.preventDefault();
-	        _vm.goToday($event)
-	      }
-	    }
-	  }, [_vm._v(" today ")]) : _vm._e(), _vm._v(" "), _c('button', {
+	  }, [_c('button', {
 	    staticClass: "fc-month-button fc-button",
 	    class: {
 	      'fc-active': _vm.currentView == 'month'
@@ -19592,7 +19560,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _vm.currentView = 'week'
 	      }
 	    }
-	  }, [_vm._v(" week ")])])])], 2)]), _vm._v(" "), _c('div', {
+	  }, [_vm._v(" week ")]), _vm._v(" "), (!_vm.isSameWeek) ? _c('button', {
+	    staticClass: "fc-month-button fc-button",
+	    attrs: {
+	      "type": "button"
+	    },
+	    on: {
+	      "click": function($event) {
+	        $event.preventDefault();
+	        _vm.goToday($event)
+	      }
+	    }
+	  }, [_vm._v(" today ")]) : _vm._e()])])], 2), _vm._v(" "), _c('div', {
+	    staticClass: "header-center"
+	  }, [_c('span', {
+	    staticClass: "prev-month",
+	    on: {
+	      "click": function($event) {
+	        $event.stopPropagation();
+	        _vm.goPrev($event)
+	      }
+	    }
+	  }, [_vm._t("next-btn", [_vm._v("«")])], 2), _vm._v(" "), _c('span', {
+	    staticClass: "title"
+	  }, [_vm._v("\n                " + _vm._s(_vm.title) + "\n            ")]), _vm._v(" "), _c('span', {
+	    staticClass: "next-month",
+	    on: {
+	      "click": function($event) {
+	        $event.stopPropagation();
+	        _vm.goNext($event)
+	      }
+	    }
+	  }, [_vm._t("prev-btn", [_vm._v("»")])], 2)]), _vm._v(" "), _c('div', {
+	    staticClass: "header-right"
+	  }, [_vm._t("header-right")], 2)]), _vm._v(" "), _c('div', {
 	    staticClass: "full-calendar-body",
 	    class: {
 	      'fc-week-view': _vm.isWeekView

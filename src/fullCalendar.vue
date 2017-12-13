@@ -5,28 +5,7 @@
         <div class="full-calendar-header">
             <div class="header-left">
                 <slot name="header-left">
-                </slot>
-            </div>
-            <div class="header-center">
-                <span @click.stop="goPrev" class="prev-month">
-                    {{leftArrow}}
-                </span>
-                <span class="title">
-                    {{title}}
-                </span>
-                <span @click.stop="goNext" class="next-month">
-                    {{rightArrow}}
-                </span>
-            </div>
-            <div class="header-right">
-                <slot name="header-right">
                     <div class="fc-button-group button-group">
-                        <button
-                                type="button"
-                                class="fc-month-button fc-button"
-                                v-if="!isSameWeek"
-                                @click.prevent="goToday"
-                        > today </button>
                         <button
                                 type="button"
                                 class="fc-month-button fc-button"
@@ -39,7 +18,31 @@
                                 :class="{'fc-active': currentView == 'week'}"
                                 @click.prevent="currentView = 'week'"
                             > week </button>
-                        </div>
+                        <button
+                                type="button"
+                                class="fc-month-button fc-button"
+                                v-if="!isSameWeek"
+                                @click.prevent="goToday"
+                        > today </button>
+                    </div>
+                </slot>
+            </div>
+
+            <div class="header-center">
+                <span @click.stop="goPrev" class="prev-month">
+                    <slot name="next-btn">&laquo;</slot>
+                </span>
+                <span class="title">
+                    {{title}}
+                </span>
+                <span @click.stop="goNext" class="next-month">
+                    <slot name="prev-btn">&raquo;</slot>
+                </span>
+            </div>
+
+            <div class="header-right">
+                <slot name="header-right">
+
                 </slot>
             </div>
         </div>
@@ -167,8 +170,6 @@ export default {
                 left: 0
             },
             selectDay: {},
-            leftArrow: '<',
-            rightArrow: '>'
         }
     },
     computed: {
@@ -494,31 +495,7 @@ export default {
         padding: 0;
     }
     .fc-button {
-        outline: none;
-        box-shadow: none;
-        display: inline-block;
-        text-decoration: none;
-        font-size: 13px;
-        line-height: 26px;
-        height: 28px;
-        margin: 0;
-        padding: 0 10px 1px;
-        cursor: pointer;
-        border-width: 1px;
-        border-style: solid;
-        -webkit-appearance: none;
-        border-radius: 3px;
-        white-space: nowrap;
-        box-sizing: border-box;
-        &.fc-active {
-            background: #eee;
-            border-color: #999;
-            -webkit-box-shadow: inset 0 2px 5px -3px rgba(0, 0, 0, 0.5);
-            box-shadow: inset 0 2px 5px -3px rgba(0, 0, 0, 0.5);
-        }
-        &:focus {
-            box-shadow: none;
-        }
+
     }
 }
 .full-calendar-body {
