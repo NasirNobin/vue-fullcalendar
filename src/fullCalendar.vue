@@ -296,14 +296,16 @@ export default {
             },300);
         },
         setSortable() {
-            var el = document.querySelectorAll('.event-box');
+            var el = document.querySelectorAll('.event-box:not([fc-sortable])');
             var vm = this;
 
             el.forEach(function(node){
                 var sortable = Sortable.create(node,{
                     group: {
                         name: 'fc-events',
-                        put: dateFunc.isFuture(moment(node.getAttribute('data-date'))),
+                        put: function(to, from){
+                            return dateFunc.isFuture(moment(to.el.getAttribute('data-date'))); // prevent to put on past
+                        },
                     },
                     draggable: '.event-item',
                     sort: false,
@@ -331,7 +333,7 @@ export default {
                     },
                 });
 
-                node.setAttribute('fc-sortable', dateFunc.isFuture(moment(node.getAttribute('data-date'))));
+                node.setAttribute('fc-sortable', true);
             });
         },
 

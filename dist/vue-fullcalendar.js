@@ -830,14 +830,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }, 300);
 	        },
 	        setSortable: function setSortable() {
-	            var el = document.querySelectorAll('.event-box');
+	            var el = document.querySelectorAll('.event-box:not([fc-sortable])');
 	            var vm = this;
 	
 	            el.forEach(function (node) {
 	                var sortable = _sortablejs2.default.create(node, {
 	                    group: {
 	                        name: 'fc-events',
-	                        put: _dateFunc2.default.isFuture((0, _moment2.default)(node.getAttribute('data-date')))
+	                        put: function put(to, from) {
+	                            return _dateFunc2.default.isFuture((0, _moment2.default)(to.el.getAttribute('data-date'))); // prevent to put on past
+	                        }
 	                    },
 	                    draggable: '.event-item',
 	                    sort: false,
@@ -864,7 +866,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                });
 	
-	                node.setAttribute('fc-sortable', _dateFunc2.default.isFuture((0, _moment2.default)(node.getAttribute('data-date'))));
+	                node.setAttribute('fc-sortable', true);
 	            });
 	        },
 	        emitChangeMonth: function emitChangeMonth(firstDayOfMonth) {
