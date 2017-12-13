@@ -298,13 +298,20 @@ export default {
         setSortable() {
             var el = document.querySelectorAll('.event-box:not([fc-sortable])');
             var vm = this;
-            var sortableConfig = {
+
+            el.forEach(function(node){
+                var sortable = Sortable.create(node,{
                 group: {
                     name: 'fc-events',
                 },
                 draggable: '.event-item',
                 sort: true,
                 animation: 150,
+
+                    // Element dragging started
+                    onStart: function (/**Event*/evt) {
+                          console.log(evt.item);
+                    },
 
                 onEnd: function (evt) {
 
@@ -326,16 +333,13 @@ export default {
 
                     item.setAttribute('start-date', toDate);
 
-                    // event.start = toDate;
+                    event.start = toDate;
 
                     console.log(evt.item);
 
                     vm.$emit('event-drop',event,toDate);
                 },
-            };
-
-            el.forEach(function(node){
-                var sortable = Sortable.create(node,sortableConfig);
+            });
                 node.setAttribute('fc-sortable', true);
             });
         },
