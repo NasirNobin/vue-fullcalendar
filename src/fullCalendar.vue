@@ -145,7 +145,7 @@ export default {
         'event-card': EventCard,
     },
     mounted() {
-        this.setSortable();
+        this.resetSortable();
         this.setDateRange();
     },
     data() {
@@ -303,17 +303,21 @@ export default {
                 var sortable = Sortable.create(node,{
                 group: {
                     name: 'fc-events',
+                    put: dateFunc.isFuture(moment(node.getAttribute('data-date'))),
                 },
                 draggable: '.event-item',
                 sort: true,
                 animation: 150,
 
-                    // Element dragging started
-                    onStart: function (/**Event*/evt) {
-                          console.log(evt.item);
-                    },
+                // Element dragging started
+                onStart: function (/**Event*/evt) {
+                      console.log(evt.item);
+                },
 
                 onEnd: function (evt) {
+
+                    var el = evt.item;
+                    el.parentNode.removeChild(el);
 
                     console.log(evt.item);
 

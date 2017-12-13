@@ -39,5 +39,12 @@ let dateFunc = {
         // let currentWeek = moment().diff(start,'week');
         return currentWeek;
     },
+
+    isPast(date){
+        return date.diff( new Date(), 'days' ) < 0;
+    },
+    isFuture(date){
+        return date.diff( new Date(), 'days' ) >= 0;
+    },
 };
 module.exports = dateFunc;
