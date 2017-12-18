@@ -861,7 +861,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	                        item.setAttribute('start-date', toDate.format());
 	
-	                        // event.start = toDate;
+	                        event.start = toDate;
 	
 	                        vm.$emit('eventDrop', event, toDate);
 	                    }

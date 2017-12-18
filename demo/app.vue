@@ -49,6 +49,7 @@ export default {
                     'id': 4,
                     'title': 'Hello 4!',
                     'start': '2017-12-13 11:22:34',
+                    'cssClass': 'processed',
                 },
             ]
         }

@@ -304,6 +304,9 @@ export default {
                 var sortable = Sortable.create(node,{
                     group: {
                         name: 'fc-events',
+                        pull: function(to, from, item){
+                            return item.getAttribute('class').indexOf('processed') == -1;
+                        },
                         put: function(to, from){
                             return dateFunc.isFuture(moment(to.el.getAttribute('data-date'))); // prevent to put on past
                         },
