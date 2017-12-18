@@ -838,6 +838,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var sortable = _sortablejs2.default.create(node, {
 	                    group: {
 	                        name: 'fc-events',
+	                        pull: function pull(to, from, item) {
+	                            return item.getAttribute('class').indexOf('processed') == -1;
+	                        },
 	                        put: function put(to, from) {
 	                            return _dateFunc2.default.isFuture((0, _moment2.default)(to.el.getAttribute('data-date'))); // prevent to put on past
 	                        }
@@ -861,7 +864,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	                        item.setAttribute('start-date', toDate.format());
 	
-	                        event.start = toDate;
+	                        // event.start = toDate;
 	
 	                        vm.$emit('eventDrop', event, toDate);
 	                    }
