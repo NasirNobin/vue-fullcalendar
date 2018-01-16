@@ -1,6 +1,6 @@
 /*!
  * vue-fullcalendar v1.0.9
- * (c) 2017 Sunny Wang <sunnywang0104@163.com> 
+ * (c) 2018 Sunny Wang <sunnywang0104@163.com> 
  * @license MIT
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -719,7 +719,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (this.currentView == 'month') {
 	                return this.currentMonth.locale(this.locale).format('MMMM YYYY');
 	            } else {
-	                var start = _dateFunc2.default.getWeekViewStartDate(this.currentMonth, this.currentWeekOfMonth).locale(this.locale);
+	                var start = _dateFunc2.default.getWeekViewStartDate(this.currentMonth, this.currentWeekOfMonth, this.firstDay).locale(this.locale);
 	                var end = start.clone().add(6, 'day');
 	                var endMonth = start.format('MMM') === end.format('MMM') ? '' : end.format('MMM') + ' ';
 	
@@ -745,7 +745,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    watch: {
 	        currentWeekOfMonth: function currentWeekOfMonth(_currentWeekOfMonth) {
-	            var start = _dateFunc2.default.getWeekViewStartDate(this.currentMonth, _currentWeekOfMonth);
+	            var start = _dateFunc2.default.getWeekViewStartDate(this.currentMonth, _currentWeekOfMonth, this.firstDay);
 	            this.currentWeek = start.week();
 	            this.resetSortable();
 	        },
@@ -791,7 +791,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (this.currentWeekOfMonth <= 0) {
 	
 	                // there's room for refactoring
-	                var startOfWeek = _dateFunc2.default.getWeekViewStartDate(this.currentMonth, this.currentWeekOfMonth);
+	                var startOfWeek = _dateFunc2.default.getWeekViewStartDate(this.currentMonth, this.currentWeekOfMonth, this.firstDay);
 	                var needToGo = startOfWeek.subtract(1, 'week');
 	
 	                this.goPrevMonth();
@@ -808,7 +808,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (this.currentWeekOfMonth >= 5) {
 	
 	                // there's room for refactoring
-	                var startOfWeek = _dateFunc2.default.getWeekViewStartDate(this.currentMonth, this.currentWeekOfMonth);
+	                var startOfWeek = _dateFunc2.default.getWeekViewStartDate(this.currentMonth, this.currentWeekOfMonth, this.firstDay);
 	                var needToGo = startOfWeek.add(1, 'week');
 	
 	                this.goNextMonth();
@@ -884,7 +884,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        emitChangeWeek: function emitChangeWeek(weekIndex) {
 	            this.currentWeekOfMonth = weekIndex;
 	
-	            var start = _dateFunc2.default.getWeekViewStartDate(this.currentMonth, this.currentWeekOfMonth);
+	            var start = _dateFunc2.default.getWeekViewStartDate(this.currentMonth, this.currentWeekOfMonth, this.firstDay);
 	            var end = start.clone().add(1, 'week').subtract(1, 'day');
 	
 	            this.$emit('changeDateRange', start, end, start);
@@ -1024,8 +1024,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    getMonthViewEndDate: function getMonthViewEndDate(date) {
 	        return this.getMonthViewStartDate(date).add(6, 'weeks').subtract(1, 'day');
 	    },
-	    getWeekViewStartDate: function getWeekViewStartDate(date, weekIndex) {
-	        var start = this.getMonthViewStartDate(date);
+	    getWeekViewStartDate: function getWeekViewStartDate(date, weekIndex, firstDay) {
+	        var start = this.getMonthViewStartDate(date, firstDay);
 	        if (weekIndex) {
 	            start.add(weekIndex * 7, 'days');
 	        }

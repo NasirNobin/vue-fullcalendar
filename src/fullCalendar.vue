@@ -182,7 +182,7 @@ export default {
             if (this.currentView == 'month') {
                 return this.currentMonth.locale(this.locale).format('MMMM YYYY');
             } else {
-                let start    = dateFunc.getWeekViewStartDate(this.currentMonth,this.currentWeekOfMonth).locale(this.locale);
+                let start    = dateFunc.getWeekViewStartDate(this.currentMonth,this.currentWeekOfMonth,this.firstDay).locale(this.locale);
                 let end      = start.clone().add(6,'day');
                 let endMonth = start.format('MMM') === end.format('MMM') ? '' : end.format('MMM') + ' ';
 
@@ -208,7 +208,7 @@ export default {
     },
     watch: {
         currentWeekOfMonth(currentWeekOfMonth){
-            let start = dateFunc.getWeekViewStartDate(this.currentMonth,currentWeekOfMonth);
+            let start = dateFunc.getWeekViewStartDate(this.currentMonth,currentWeekOfMonth,this.firstDay);
             this.currentWeek = start.week();
             this.resetSortable();
         },
@@ -255,7 +255,7 @@ export default {
             if (this.currentWeekOfMonth <= 0) {
 
                 // there's room for refactoring
-                let startOfWeek = dateFunc.getWeekViewStartDate(this.currentMonth,this.currentWeekOfMonth);
+                let startOfWeek = dateFunc.getWeekViewStartDate(this.currentMonth,this.currentWeekOfMonth,this.firstDay);
                 let needToGo    = startOfWeek.subtract(1,'week');
 
                 this.goPrevMonth();
@@ -273,7 +273,7 @@ export default {
             if (this.currentWeekOfMonth >= 5) {
 
                 // there's room for refactoring
-                let startOfWeek = dateFunc.getWeekViewStartDate(this.currentMonth,this.currentWeekOfMonth);
+                let startOfWeek = dateFunc.getWeekViewStartDate(this.currentMonth,this.currentWeekOfMonth,this.firstDay);
                 let needToGo    = startOfWeek.add(1,'week');
 
                 this.goNextMonth();
@@ -352,7 +352,7 @@ export default {
         emitChangeWeek(weekIndex) {
             this.currentWeekOfMonth = weekIndex;
 
-            let start = dateFunc.getWeekViewStartDate(this.currentMonth,this.currentWeekOfMonth);
+            let start = dateFunc.getWeekViewStartDate(this.currentMonth,this.currentWeekOfMonth,this.firstDay);
             let end   = start.clone().add(1,'week').subtract(1,'day');
 
             this.$emit('changeDateRange', start, end, start)

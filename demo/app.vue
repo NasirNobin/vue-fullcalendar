@@ -3,7 +3,7 @@
     <full-calendar
         class="test-fc"
       :events="fcEvents"
-      first-day='0'
+      first-day='3'
       locale="en"
       @changeDateRange="changeDateRange"
       @eventClick="eventClick"
