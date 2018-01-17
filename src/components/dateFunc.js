@@ -32,8 +32,14 @@ let dateFunc = {
             return 0;
         }
 
+
         let start       = this.getMonthViewStartDate(date,firstDay);
-        let currentWeek = moment().week()-start.week();
+        // let currentWeek = moment().week()-start.week();
+        // console.log(start.format());
+        // console.log(currentWeek);
+
+        var currentWeek = moment().diff(start,'week');
+
         currentWeek     = currentWeek < 0 ? 0 : currentWeek;
         currentWeek     = currentWeek > 5 ? 5 : currentWeek;
         // let currentWeek = moment().diff(start,'week');

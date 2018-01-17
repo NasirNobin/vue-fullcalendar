@@ -770,6 +770,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.emitChangeMonth((0, _moment2.default)().startOf('month'));
 	            } else {
 	                this.currentMonth = (0, _moment2.default)().startOf('month');
+	                // console.log(this.currentMonth.format());
+	                // console.log(dateFunc.getCurrentWeekOfMonth(moment(),this.firstDay));
 	                this.emitChangeWeek(_dateFunc2.default.getCurrentWeekOfMonth((0, _moment2.default)(), this.firstDay));
 	            }
 	        },
@@ -1043,7 +1045,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	
 	        var start = this.getMonthViewStartDate(date, firstDay);
-	        var currentWeek = (0, _moment2.default)().week() - start.week();
+	        // let currentWeek = moment().week()-start.week();
+	        // console.log(start.format());
+	        // console.log(currentWeek);
+	
+	        var currentWeek = (0, _moment2.default)().diff(start, 'week');
+	
 	        currentWeek = currentWeek < 0 ? 0 : currentWeek;
 	        currentWeek = currentWeek > 5 ? 5 : currentWeek;
 	        // let currentWeek = moment().diff(start,'week');

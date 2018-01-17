@@ -5,6 +5,7 @@
       :events="fcEvents"
       first-day='3'
       locale="en"
+      defaultView="week"
       @changeDateRange="changeDateRange"
       @eventClick="eventClick"
       @dayClick="dayClick"

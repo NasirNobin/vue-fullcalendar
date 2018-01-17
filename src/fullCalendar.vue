@@ -233,6 +233,8 @@ export default {
                 this.emitChangeMonth(moment().startOf('month'));
             }else{
                 this.currentMonth = moment().startOf('month');
+                // console.log(this.currentMonth.format());
+                // console.log(dateFunc.getCurrentWeekOfMonth(moment(),this.firstDay));
                 this.emitChangeWeek(dateFunc.getCurrentWeekOfMonth(moment(),this.firstDay));
             }
         },
